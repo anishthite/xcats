@@ -12,53 +12,70 @@ function shuffle(array) {
 
 
 class Game {
-    
-
-
-
-
-
     constructor(player_names_lists, card_info) {
-
         this.players = []
+        this.deck = []
+        //will break if playerlist is empty but idc
+        this.curr_player_ind = 0
         for (i = 0; i < player_names_lists.length; i++) {
             //add player & deal out diffuse
             this.players.push(new Player(player_names_lists[i]));
             this.players[i].addCard(new Card(card_info.DIFFUSE.name, card_info.DIFFUSE.img));
 
         }
-        this.deck = []
-
         for (var type in num_cards) {
             for (var i = 0; i < num_cards[type]; i++) {
                 this.deck.push(new Card(card_info[type].name, card_info[type].img))
             }
         }
-    
-    
-    
         //shuffle cards w/out explodes
         shuffle(this.deck)
-
         //deal out cards
         for (var i = 0; i < 14; i++) {
             for (var player in this.players) {
-                var card = this.deck.pop()
-                player.cards.push(card)
+                this.draw(player);
             }
         }
         //add explodes
-        for (var i = 0; i < 14; i++) {
-            for (var player in this.players) {
-                var card = this.deck.pop()
-                player.cards.push(card)
-            }
+        for (var i = 0; i < player_names_lists.length; i++) {
+            this.deck.push(new Card(card_info.DEATH.name, card_info.DEATH.img))
         }
-
         //reshuffle
         shuffle(this.deck)
 
     }
+
+    //draws card for player
+    draw(player) {
+        var card = this.deck.pop()
+        player.cards.push(card)
+    }
+
+    turn() {
+        //player does any cards they want
+
+        // draw card for 
+
+        this.go_to_next_player();
+    }
+
+
+    
+    go_to_next_player() {
+
+        function cycle_curr_player_index(){
+            if (this.curr_player_ind + 1 >= this.players.length) {
+                this.curr_player_ind = 0;
+            } else {
+                this.curr_player_ind += 1;
+            }
+        }
+
+        do {
+            cycle_curr_player_index()
+        } while (this.players[this.curr_player_ind].alive != true)
+    }
+
 
 }
 

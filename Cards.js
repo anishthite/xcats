@@ -37,7 +37,9 @@ function skip(player) {
 
 // shuffle cards: I'm too lazy, use the shuffle from Game.js
 
-
+function death(player) {
+    player.alive = false;
+}
 
 //see the fut cards
 function future(player1) {
